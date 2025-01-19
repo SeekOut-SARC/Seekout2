@@ -6,76 +6,39 @@
     <title>Location-Based Hint</title>
     <style>
         body {
+            background-color: black;
+            color: white;
             font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 50px;
-            background-color: black;
-            color: white;
         }
         h1 {
-            font-size: 36px;
+            font-size: 2.5em;
+            margin-bottom: 20px;
         }
         p {
-            font-size: 20px;
-        }
-        #hint-input {
-            margin: 20px;
-        }
-        label {
-            font-size: 24px;
-        }
-        input {
-            padding: 10px;
-            font-size: 18px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 18px;
-            background-color: white;
-            color: black;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: gray;
+            font-size: 1.2em;
         }
         footer {
             margin-top: 50px;
-            font-size: 18px;
-            color: white;
-        }
-        img {
-            width: 200px;
-            height: auto;
-            margin-bottom: 20px;
+            font-size: 1em;
+            color: gray;
         }
     </style>
 </head>
 <body>
-    <img src="seekout/C:\Users\Dell\OneDrive\Desktop\seekout\SEEKOUT_Logo_PNG[1].jpg" alt="SeekOut Logo">
-    <h1>Verify Your Hint and Location</h1>
-    <p id="status">Please enter your previous hint to proceed.</p>
-    
-    <div id="hint-input">
-        <label for="userHint">Enter your previous hint:</label>
-        <input type="text" id="userHint" placeholder="Type your hint here">
-        <button id="verifyHint">Submit</button>
-    </div>
-
-    <p id="hint"></p>
-
-    <footer>
-        Designed with ❤️ by SARC team :)
-    </footer>
+    <h1>Verify Your Location and Previous Hint</h1>
+    <p id="status">Checking your location...</p>
+    <p id="hint" style="font-weight: bold; font-size: 20px;"></p>
 
     <script>
-        // Correct previous hint (stored in the code)
-        const correctHint = "Start at the big tree";
-
         // Target location (latitude and longitude)
-        const targetLatitude = 19.13558331062728; // Example: Latitude for the target location
-        const targetLongitude = 72.90880073261846; // Example: Longitude for the target location
+        const targetLatitude = 19.13558331062728; // Example: Latitude
+        const targetLongitude = 72.90880073261846; // Example: Longitude
         const thresholdDistance = 0.05; // Distance threshold in kilometers (50 meters)
+
+        // Previous hint to verify
+        const correctPreviousHint = "A professor believed that every discovery began with curiosity. His journey started in a place where young minds first explore the vastness of knowledge.The first fragment lies hidden where energy thrives, and paths converge. An excerpt from his journal reads:\nThe first step on the journey lies where the hum of youthful voices fills the air, and chariots of yellow stand still, waiting for the next journey to begin. The keeper of all arrivals and departures watches over this place, and it is here where the path to the next fragment begins. To proceed, one must mark their place in the journey.";
 
         // Function to calculate the distance between two coordinates
         function getDistance(lat1, lon1, lat2, lon2) {
@@ -91,23 +54,10 @@
             return R * c; // Distance in kilometers
         }
 
-        // Event listener for the hint verification button
-        document.getElementById("verifyHint").addEventListener("click", () => {
-            const userHint = document.getElementById("userHint").value.trim();
-            const statusElement = document.getElementById("status");
+        // Prompt user for their previous hint
+        const userPreviousHint = prompt("Enter your previous hint:");
 
-            // Check if the entered hint matches the correct hint
-            if (userHint === correctHint) {
-                statusElement.innerText = "Hint verified! Now checking your location...";
-                checkLocation();
-            } else {
-                statusElement.innerText = "Incorrect hint! Please try again.";
-                document.getElementById("hint").innerText = "";
-            }
-        });
-
-        // Function to check the user's location
-        function checkLocation() {
+        if (userPreviousHint === correctPreviousHint) {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -117,8 +67,8 @@
 
                         if (distance <= thresholdDistance) {
                             document.getElementById("status").innerText = "Location matched!";
-                            document.getElementById("hint").innerText = "🎉 Your hint: Look under the big tree near the fountain!";
-                        } else {
+                            document.getElementById("hint").innerText = "🎉 YOUR HINT:\nMeet me at 9:58 across from fleeting strides, where stories are brewed over steaming cups. Beyond this refuge lies a path where time bows to the swift, yet whispers of its conquest are known only to those who traverse its fleeting embrace. It is a place where ambition measures itself not in years but in moments, and the horizon stretches further with every fleeting second. Where does this pursuit linger, leaving its invisible mark?";
+
                             document.getElementById("status").innerText = "Location mismatch!";
                             document.getElementById("hint").innerText = "❌ You are not at the correct location. Please try again.";
                         }
@@ -130,7 +80,14 @@
             } else {
                 document.getElementById("status").innerText = "Geolocation is not supported by your browser.";
             }
+        } else {
+            document.getElementById("status").innerText = "Incorrect previous hint!";
+            document.getElementById("hint").innerText = "❌ Please check your previous hint and try again.";
         }
     </script>
+
+    <footer>
+        Designed with ❤️ by SARC team :)
+    </footer>
 </body>
 </html>
