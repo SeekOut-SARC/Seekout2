@@ -35,7 +35,7 @@
         // Target location (latitude and longitude)
         const targetLatitude = 19.129135713874845; // Example: Latitude
         const targetLongitude = 72.91898574181938; // Example: Longitude
-        const thresholdDistance = 0.05; // Distance threshold in kilometers (50 meters)
+        const thresholdDistance = 0.1; // Distance threshold in kilometers (50 meters)
 
         // Previous hint to verify
         const correctPreviousHint = "123WEAVK";
@@ -54,7 +54,7 @@
         }
 
         // Prompt user for their previous hint
-        const userPreviousHint = prompt("Enter your previous hint:");
+        const userPreviousHint = prompt("ENTER YOUR PREVIOUS HINT CODE:");
 
         if (userPreviousHint === correctPreviousHint) {
             if (navigator.geolocation) {
@@ -66,7 +66,7 @@
 
                         if (distance <= thresholdDistance) {
                             document.getElementById("status").innerText = "Location matched!";
-                            document.getElementById("hint").innerText = "🎉 YOUR HINT:\nMeet me at 9:58 across from fleeting strides, where stories are brewed over steaming cups. Beyond this refuge lies a path where time bows to the swift, yet whispers of its conquest are known only to those who traverse its fleeting embrace. It is a place where ambition measures itself not in years but in moments, and the horizon stretches further with every fleeting second. Where does this pursuit linger, leaving its invisible mark?";
+                            document.getElementById("hint").innerText = "🎉 YOUR HINT:\nMeet me at 9:58 across from fleeting strides, where stories are brewed over steaming cups. Beyond this refuge lies a path where time bows to the swift, yet whispers of its conquest are known only to those who traverse its fleeting embrace. It is a place where ambition measures itself not in years but in moments, and the horizon stretches further with every fleeting second. Where does this pursuit linger, leaving its invisible mark?- CODE-123WEAVK";
 
                             document.getElementById("status").innerText = "Location mismatch!";
                             document.getElementById("hint").innerText = "❌ You are not at the correct location. Please try again.";
