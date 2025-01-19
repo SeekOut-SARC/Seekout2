@@ -3,31 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kat Gya!</title>
-    <style>
-        body {
-            background-color: #000;
-            color: #fff;
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-        }
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        p {
-            font-size: 1.5rem;
-        }
-    </style>
+    <title>Location-Based Hint</title>
 </head>
-<body>
-    <h1>Beta, Kat Gya Tumhara 😏</h1>
-    <p>Aas pass hai tumhara qr dhundoooo 😜</p>
+<body style="font-family: Arial, sans-serif; text-align: center; margin-top: 50px;">
+    <h1>Verify Your Hint and Location</h1>
+    <p id="status">Please enter your previous hint to proceed.</p>
+    
+    <div id="hint-input" style="margin: 20px;">
+        <label for="userHint" style="font-size: 16px;">Enter your previous hint:</label>
+        <input type="text" id="userHint" placeholder="Type your hint here" style="padding: 5px; margin: 10px;">
+        <button id="verifyHint" style="padding: 5px 10px;">Submit</button>
+    </div>
+
+    <p id="hint" style="font-weight: bold; font-size: 20px;"></p>
+
+    <script>
+        // Correct previous hint (stored in the code)
+        const correctHint = "Start at the big tree";
+
+        // Target location (latitude and longitude)
+        const targetLatitude = 19.13558331062728; // Example: Latitude for the target location
+        const targetLongitude = 72.90880073261846; // Example: Longitude for the target location
+        const thresholdDistance = 0.05; // Distance threshold in kilometers (50 meters)
+
+        // Function to calculate the distance between two coordinates
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const toRad = (value) => (value * Math.PI) / 180;
+            const R = 6371; // Earth's radius in kilometers
+            const dLat = toRad(lat2 - lat1);
+            const dLon = toRad(lon2 - lon1);
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c; // Distance in kilometers
+        }
+
+        // Event listener for the hint verification button
+        document.getElementById("verifyHint").addEventListener("click", () => {
+            const userHint = document.getElementById("userHint").value.trim();
+            const statusElement = document.getElementById("status");
+
+            // Check if the entered hint matches the correct hint
+            if (userHint === correctHint) {
+                statusElement.innerText = "Hint verified! Now checking your location...";
+                checkLocation();
+            } else {
+                statusElement.innerText = "Incorrect hint! Please try again.";
+                document.getElementById("hint").innerText = "";
+            }
+        });
+
+        // Function to check the user's location
+        function checkLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const userLatitude = position.coords.latitude;
+                        const userLongitude = position.coords.longitude;
+                        const distance = getDistance(userLatitude, userLongitude, targetLatitude, targetLongitude);
+
+                        if (distance <= thresholdDistance) {
+                            document.getElementById("status").innerText = "Location matched!";
+                            document.getElementById("hint").innerText = "🎉 Your hint: Look under the big tree near the fountain!";
+                        } else {
+                            document.getElementById("status").innerText = "Location mismatch!";
+                            document.getElementById("hint").innerText = "❌ You are not at the correct location. Please try again.";
+                        }
+                    },
+                    (error) => {
+                        document.getElementById("status").innerText = "Unable to get your location. Please enable GPS and try again.";
+                    }
+                );
+            } else {
+                document.getElementById("status").innerText = "Geolocation is not supported by your browser.";
+            }
+        }
+    </script>
 </body>
 </html>
+
+       
