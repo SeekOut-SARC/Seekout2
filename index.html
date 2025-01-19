@@ -17,13 +17,19 @@
 
     <p id="hint" style="font-weight: bold; font-size: 20px;"></p>
 
+    <!-- Map container (initially hidden) -->
+    <div id="map-container" style="margin-top: 20px; display: none;">
+        <h2>Map</h2>
+        <img src="Map_Among_us[1].png" alt="Location Map" style="width: 80%; max-width: 600px; border: 1px solid #ccc;">
+    </div>
+
     <script>
         // Correct previous hint (stored in the code)
         const correctHint = "Start at the big tree";
 
         // Target location (latitude and longitude)
-        const targetLatitude =  19.1245137; // Example: Latitude for the target location
-        const targetLongitude = 72.9106086; // Example: Longitude for the target location
+        const targetLatitude = 19.13558331062728; // Example: Latitude for the target location
+        const targetLongitude = 72.90880073261846; // Example: Longitude for the target location
         const thresholdDistance = 0.05; // Distance threshold in kilometers (50 meters)
 
         // Function to calculate the distance between two coordinates
@@ -52,6 +58,7 @@
             } else {
                 statusElement.innerText = "Incorrect hint! Please try again.";
                 document.getElementById("hint").innerText = "";
+                document.getElementById("map-container").style.display = "none"; // Hide the map if the hint is incorrect
             }
         });
 
@@ -67,21 +74,26 @@
                         if (distance <= thresholdDistance) {
                             document.getElementById("status").innerText = "Location matched!";
                             document.getElementById("hint").innerText = "🎉 Your hint: Look under the big tree near the fountain!";
+                            document.getElementById("map-container").style.display = "block"; // Show the map when location is verified
                         } else {
                             document.getElementById("status").innerText = "Location mismatch!";
                             document.getElementById("hint").innerText = "❌ You are not at the correct location. Please try again.";
+                            document.getElementById("map-container").style.display = "none"; // Hide the map if location mismatched
                         }
                     },
                     (error) => {
                         document.getElementById("status").innerText = "Unable to get your location. Please enable GPS and try again.";
+                        document.getElementById("map-container").style.display = "none"; // Hide the map if location cannot be determined
                     }
                 );
             } else {
                 document.getElementById("status").innerText = "Geolocation is not supported by your browser.";
+                document.getElementById("map-container").style.display = "none"; // Hide the map if geolocation is unsupported
             }
         }
     </script>
 </body>
 </html>
 
-       
+    
+    
